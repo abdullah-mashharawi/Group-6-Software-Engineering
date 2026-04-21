@@ -1,0 +1,34 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title University Course Registration System - Container Diagram
+
+Person(student, "Student")
+Person(instructor, "Instructor")
+Person(registrar, "Registrar's Office")
+
+System_Boundary(system, "University Course Registration System") {
+
+    Container(web, "Web Application", "HTML, CSS, JavaScript", "User interface for students, instructors, and registrar")
+
+    Container(api, "Application Server", "Backend (Java / Python / Node.js)", "Handles business logic: enrollment, scheduling, prerequisites, grading rules")
+
+    ContainerDb(db, "Database", "Relational Database", "Stores students, courses, registrations, prerequisites, grades")
+}
+
+System_Ext(auth, "Authentication System")
+System_Ext(finance, "Finance System")
+System_Ext(transcript, "Transcript System")
+
+Rel(student, web, "Uses")
+Rel(instructor, web, "Uses")
+Rel(registrar, web, "Uses")
+
+Rel(web, api, "Sends requests")
+Rel(api, db, "Reads/Writes data")
+
+Rel(api, auth, "Authenticates users")
+Rel(api, finance, "Validates payments")
+Rel(api, transcript, "Exports academic records")
+
+@enduml
