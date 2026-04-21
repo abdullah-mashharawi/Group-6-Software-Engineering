@@ -1,0 +1,26 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title University Course Registration System - Context Diagram
+
+Person(student, "Student", "Browses courses, registers, drops/swaps courses, views schedule & grades")
+
+Person(instructor, "Instructor", "Manages courses, uploads grades, posts announcements")
+
+Person(registrar, "Registrar's Office", "Administrative department managing enrollment rules, capacity, and scheduling policies")
+
+System(system, "University Course Registration System", "Handles enrollment, scheduling, prerequisites, and academic records")
+
+System_Ext(auth, "Authentication System", "Verifies user identity")
+System_Ext(finance, "Finance System", "Handles payments and fees validation")
+System_Ext(transcript, "Transcript System", "Manages official academic records")
+
+Rel(student, system, "Uses")
+Rel(instructor, system, "Uses")
+Rel(registrar, system, "Configures rules and monitors registration")
+
+Rel(system, auth, "Authenticates users")
+Rel(system, finance, "Checks payment status")
+Rel(system, transcript, "Sends academic records")
+
+@enduml
