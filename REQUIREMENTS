@@ -1,0 +1,28 @@
+Student: 
+1. enrollment
+2. scheduling
+3. academic records
+4. browse available courses
+5. register for classes
+6. drop/swap courses
+7. view academic sched. & grades
+
+Registrar’s office:
+1. verifies prerequisites
+2. manages course capacities
+3. oversees registration timelines
+
+Instructors:
+1. upload grades
+2. manage course rosters
+3. post announcements.
+
+System:
+1. maintains a database of 
+2. students
+3. instructors
+4. courses
+5. prerequisites
+6. grade records 
+
+- Integration with institutional systems (e.g., authentication, finance, or transcript services).
