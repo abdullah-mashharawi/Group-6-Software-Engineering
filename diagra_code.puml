@@ -1,0 +1,67 @@
+@startuml
+left to right direction
+skinparam linetype ortho
+
+actor Student
+actor Instructor
+actor Registrar
+actor "External Systems" as External
+
+rectangle "University Course Registration System" {
+
+  (Login)
+
+  package "Student Actions" {
+    (Browse Courses)
+    (Register for Course)
+    (Drop Course)
+    (Swap Course)
+    (View Schedule)
+    (View Grades)
+  }
+
+  package "Instructor Actions" {
+    (Manage Course Roster)
+    (Upload Grades)
+    (Post Announcements)
+  }
+
+  package "Registrar Actions" {
+    (Manage Course Capacity)
+    (Manage Registration Timeline)
+  }
+
+  (Register for Course) .> (Verify Prerequisites) : <<include>>
+  (Register for Course) .> (Check Capacity) : <<include>>
+
+  (Swap Course) .> (Drop Course) : <<include>>
+  (Swap Course) .> (Register for Course) : <<include>>
+
+  ' --- shared login connections ---
+  Student --> (Login)
+  Instructor --> (Login)
+  Registrar --> (Login)
+  External --> (Login)
+
+  ' --- student ---
+  Student --> (Browse Courses)
+  Student --> (Register for Course)
+  Student --> (Drop Course)
+  Student --> (Swap Course)
+  Student --> (View Schedule)
+  Student --> (View Grades)
+
+  ' --- instructor ---
+  Instructor --> (Manage Course Roster)
+  Instructor --> (Upload Grades)
+  Instructor --> (Post Announcements)
+
+  ' --- registrar ---
+  Registrar --> (Manage Course Capacity)
+  Registrar --> (Manage Registration Timeline)
+
+  ' --- external ---
+  External --> (View Grades)
+
+}
+@enduml
