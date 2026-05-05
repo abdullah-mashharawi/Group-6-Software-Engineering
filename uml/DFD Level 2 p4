@@ -1,0 +1,45 @@
+@startuml
+title DFD Level 2 - Process 4.0: Process Payments
+left to right direction
+
+skinparam rectangle {
+    BorderColor #333333
+    FontSize 12
+}
+skinparam database {
+    BackgroundColor #DDEEFF
+    BorderColor #336699
+    FontSize 11
+}
+
+rectangle "Student" as Student #DDDDDD
+rectangle "Finance System" as Finance #BBBBBB
+
+rectangle "4.1\nCalculate\nRegistration Fees" as P41 #FFFACD
+rectangle "4.2\nSend Payment\nRequest" as P42 #FFFACD
+rectangle "4.3\nVerify Payment" as P43 #FFFACD
+rectangle "4.4\nStore Payment\nRecord" as P44 #FFFACD
+rectangle "4.5\nUpdate Enrollment\nStatus" as P45 #FFFACD
+
+database "D2: Course DB" as D_Course
+database "D3: Enrollment DB" as D_Enroll
+database "D5: Payment DB" as D_Payment
+
+Student --> P41 : Fee Calculation Request
+P41 --> D_Course : Read Course Fee Data
+D_Course --> P41 : Fee Details
+P41 --> P42 : Calculated Fee Amount
+
+P42 --> Finance : Payment Verification Request
+P42 --> Student : Fee Summary / Payment Prompt
+
+Finance --> P43 : Payment Status
+P43 --> P44 : Verified Payment Data
+
+P44 --> D_Payment : Store Transaction Record
+P44 --> P45 : Payment Confirmation
+
+P45 --> D_Enroll : Update Enrollment Payment Status
+P45 --> Student : Registration Confirmation / Receipt
+
+@enduml
