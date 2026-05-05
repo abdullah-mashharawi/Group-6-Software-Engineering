@@ -1,0 +1,60 @@
+@startuml
+title DFD Level 2 - Process 2.0: Manage Course Registration
+left to right direction
+
+skinparam rectangle {
+    BorderColor #333333
+    FontSize 12
+}
+skinparam database {
+    BackgroundColor #DDEEFF
+    BorderColor #336699
+    FontSize 11
+}
+
+rectangle "Student" as Student #DDDDDD
+rectangle "Registrar Office" as Registrar #DDDDDD
+rectangle "Finance System" as Finance #BBBBBB
+
+rectangle "2.1\nCheck Prerequisites" as P21 #FFFACD
+rectangle "2.2\nCheck Seat\nAvailability" as P22 #FFFACD
+rectangle "2.3\nCheck Financial\nHold" as P23 #FFFACD
+rectangle "2.4\nAdd / Drop /\nSwap Course" as P24 #FFFACD
+rectangle "2.5\nUpdate Enrollment\nRecord" as P25 #FFFACD
+rectangle "2.6\nGenerate Payment\nRequest" as P26 #FFFACD
+
+database "D2: Course DB" as D_Course
+database "D3: Enrollment DB" as D_Enroll
+database "D5: Payment DB" as D_Payment
+
+Student --> P21 : Course Registration / Drop / Swap Request
+Registrar --> P21 : Prerequisite Rules and Policies
+P21 --> D_Course : Read Prerequisite Data
+D_Course --> P21 : Prerequisite Records
+P21 --> P22 : Prerequisite-Validated Request
+P21 --> Student : Missing Prerequisites Error
+
+P22 --> D_Course : Read Seat Capacity
+D_Course --> P22 : Available Seats
+P22 --> P23 : Seat-Validated Request
+P22 --> Student : Course Full Error
+
+P23 --> Finance : Financial Hold Check Request
+Finance --> P23 : Hold Status
+P23 --> P24 : Cleared Request
+P23 --> Student : Financial Hold Error
+
+Registrar --> P24 : Enrollment Timeline and Capacity Config
+P24 --> P25 : Validated Course Selection
+P24 --> Student : Registration Closed Error
+
+P25 --> D_Enroll : Save / Update Enrollment Record
+P25 --> P26 : Enrollment Confirmation and Fee Details
+
+P26 --> D_Payment : Store Payment Request
+P26 --> Finance : Payment Verification Request
+Finance --> P26 : Payment Status
+P26 --> D_Enroll : Update Payment Status
+P26 --> Student : Registration Confirmation / Payment Receipt
+
+@enduml
