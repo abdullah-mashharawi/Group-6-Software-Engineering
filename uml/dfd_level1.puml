@@ -1,0 +1,72 @@
+@startuml
+title DFD Level 1 - University Course Registration System
+left to right direction
+
+skinparam rectangle {
+    BorderColor #333333
+    FontSize 12
+}
+skinparam database {
+    BackgroundColor #DDEEFF
+    BorderColor #336699
+    FontSize 11
+}
+
+rectangle "Student" as Student #DDDDDD
+rectangle "Instructor" as Instructor #DDDDDD
+rectangle "Registrar Office" as Registrar #DDDDDD
+rectangle "Authentication System" as Auth #BBBBBB
+rectangle "Finance System" as Finance #BBBBBB
+rectangle "Transcript System" as Transcript #BBBBBB
+
+rectangle "1.0\nAuthenticate Users" as P1 #FFFACD
+rectangle "2.0\nManage Course\nRegistration" as P2 #FFFACD
+rectangle "3.0\nManage Courses\nand Grades" as P3 #FFFACD
+rectangle "4.0\nProcess Payments" as P4 #FFFACD
+rectangle "5.0\nView Academic\nRecords" as P5 #FFFACD
+
+database "D1: User DB" as D_User
+database "D2: Course DB" as D_Course
+database "D3: Enrollment DB" as D_Enroll
+database "D4: Grades DB" as D_Grades
+database "D5: Payment DB" as D_Payment
+
+Student --> P1 : Login Credentials
+Instructor --> P1 : Login Credentials
+Registrar --> P1 : Login Credentials
+P1 --> Auth : Credential Verification Request
+Auth --> P1 : Auth Result
+P1 --> D_User : Store / Read Session Token
+P1 --> Student : Access Granted / Denied
+P1 --> Instructor : Access Granted / Denied
+P1 --> Registrar : Access Granted / Denied
+
+Student --> P2 : Registration / Drop / Swap Request
+Registrar --> P2 : Enrollment Rules and Capacity Policies
+P2 --> D_Course : Read Course and Prerequisite Data
+P2 --> D_Enroll : Read / Update Enrollment Record
+P2 --> P4 : Payment Request
+P4 --> P2 : Payment Confirmation
+P2 --> Student : Registration Confirmation / Error Message
+
+Instructor --> P3 : Grade Submission / Course Updates
+Registrar --> P3 : Capacity and Roster Approval
+P3 --> D_Course : Update Course Information
+P3 --> D_Grades : Store / Update Grades
+P3 --> D_Enroll : Read Enrolled Students
+P3 --> Instructor : Updated Course Roster
+
+P4 --> Finance : Payment Verification Request
+Finance --> P4 : Payment Status
+P4 --> D_Payment : Store Transaction Record
+P4 --> D_Enroll : Update Enrollment Payment Status
+P4 --> Student : Payment Confirmation
+
+Student --> P5 : Transcript / Record Request
+P5 --> D_User : Read Student Profile
+P5 --> D_Grades : Read Grade Records
+P5 --> D_Enroll : Read Enrollment History
+P5 --> Transcript : Academic Records Export
+P5 --> Student : Schedule, Grades and Transcript
+
+@enduml
