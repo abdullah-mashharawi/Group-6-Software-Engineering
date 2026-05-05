@@ -1,0 +1,49 @@
+@startuml DFD Level 2 – Process 5
+title DFD Level 2 – Process 5.0: View Academic Records
+left to right direction
+skinparam rectangle { 
+BorderColor #333333
+FontSize 12 
+}
+skinparam database { 
+BackgroundColor #DDEEFF
+BorderColor #336699
+FontSize 11
+}
+skinparam arrow { 
+Color #333333
+FontSize 10 
+}
+
+rectangle "Student"             as Student    #DDDDDD
+rectangle "Transcript\nSystem"  as Transcript #BBBBBB
+
+rectangle "5.1\nRetrieve\nStudent Profile"    as P51 #FFFACD
+rectangle "5.2\nFetch Enrollment\nHistory"    as P52 #FFFACD
+rectangle "5.3\nFetch\nGrade Records"         as P53 #FFFACD
+rectangle "5.4\nBuild Academic\nHistory"      as P54 #FFFACD
+rectangle "5.5\nGenerate &\nExport Transcript" as P55 #FFFACD
+
+database "D1: User DB"       as D_User
+database "D3: Enrollment DB" as D_Enroll
+database "D4: Grades DB"     as D_Grades
+
+Student --> P51            : Transcript / Academic Record Request
+P51 --> D_User             : Read Student Profile
+D_User --> P51             : Student Profile Data
+P51 --> P52                : Student ID
+
+P52 --> D_Enroll           : Read Enrollment History
+D_Enroll --> P52           : Enrollment Records (courses, semesters)
+P52 --> P53                : Enrollment Data
+
+P53 --> D_Grades           : Read Grade Records
+D_Grades --> P53           : Grade Data
+P53 --> P54                : Grades + Enrollment Data
+
+P54 --> P55                : Compiled Academic History
+
+P55 --> Transcript         : Academic Records Export
+P55 --> Student            : Schedule, Grades & Transcript View
+
+@enduml
