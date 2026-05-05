@@ -1,0 +1,206 @@
+@startuml Merged_Class_Diagram
+title Merged Generalization & Aggregation Class Diagram - Student Enrollment System
+
+' ─────────────────────────────────────────
+' ABSTRACT PARENT CLASSES
+' ─────────────────────────────────────────
+
+abstract class User {
+  +UserID : String
+  +Name : String
+  +Email : String
+  +Status : String
+  +login() : void
+  +validateSession() : void
+  +viewSchedule() : void
+  +viewGrades() : void
+}
+
+abstract class SystemComponent {
+  +SystemID : String
+  +SystemName : String
+}
+
+abstract class AcademicRecord {
+  +RecordID : String
+  +StudentID : String
+  +Date : Date
+}
+
+abstract class ScheduleBase {
+  +ScheduleID : String
+  +generateSchedule() : void
+  +updateSchedule() : void
+}
+
+abstract class CourseOffering {
+  +Title : String
+  +getPrerequisites() : List
+}
+
+' ─────────────────────────────────────────
+' CONCRETE CLASSES
+' ─────────────────────────────────────────
+
+class Student {
+  +StudentID : String
+  +browseCourses() : void
+  +registerCourse(section : Section) : void
+  +dropCourse(section : Section) : void
+  +swapCourse(oldSection : Section, newSection : Section) : void
+}
+
+class Instructor {
+  +InstructorID : String
+  +uploadGrades(section : Section) : void
+  +manageRoster(section : Section) : void
+  +postAnnouncement(section : Section) : void
+}
+
+class Registrar {
+  +RegistrarID : String
+  +verifyPrerequisites(student : Student, course : Course) : void
+  +checkCapacity(section : Section) : void
+  +manageTimeline() : void
+}
+
+class AuthenticationSystem {
+  +login() : void
+  +validateSession() : void
+}
+
+class FinanceSystem {
+  +StudentID : String
+  +Balance : Double
+  +checkHold() : Boolean
+}
+
+class TranscriptSystem {
+  +SystemID : String
+  +SystemName : String
+  +generateTranscript(student : Student) : void
+  +fetchStudentRecords(student : Student) : void
+  +exportTranscript(transcript : Transcript) : void
+}
+
+class Schedule {
+  +ScheduleID : String
+  +StudentID : String
+  +listOfSections : List
+  +generateSchedule() : void
+  +updateSchedule() : void
+}
+
+class Course {
+  +CourseID : String
+  +Title : String
+  +Credits : Integer
+  +getPrerequisites() : List
+}
+
+class Section {
+  +SectionID : String
+  +CourseID : String
+  +InstructorID : String
+  +Capacity : Integer {Capacity > 0}
+  +EnrolledCount : Integer
+  +Schedule : String
+  +checkAvailability() : Boolean
+  +addStudent(student : Student) : void
+  +removeStudent(student : Student) : void
+}
+
+class Enrollment {
+  +EnrollmentID : String
+  +StudentID : String
+  +SectionID : String
+  +Status : String
+  +createEnrollment() : void
+  +deleteEnrollment() : void
+}
+
+class Grade {
+  +GradeID : String
+  +StudentID : String
+  +SectionID : String
+  #Grade : String
+  +assignGrade() : void
+  +updateGrade() : void
+}
+
+class Transcript {
+  +TranscriptID : String
+  +IssueDate : Date
+  +GPA : Double {GPA >= 0.0 and GPA <= 4.0}
+  +TotalCredits : Integer
+  +calculateGPA() : Double
+  +getTranscriptDetails() : void
+}
+
+class Announcement {
+  +AnnouncementID : String
+  +Content : String
+  +Date : Date
+  +SectionID : String
+  +publish() : void
+}
+
+' ─────────────────────────────────────────
+' GENERALIZATION (Inheritance)
+' ─────────────────────────────────────────
+
+User <|-- Student                         : Inheritance (Generalization)
+User <|-- Instructor                      : Inheritance (Generalization)
+User <|-- Registrar                       : Inheritance (Generalization)
+
+SystemComponent <|-- AuthenticationSystem : Inheritance (Generalization)
+SystemComponent <|-- FinanceSystem        : Inheritance (Generalization)
+SystemComponent <|-- TranscriptSystem     : Inheritance (Generalization)
+
+AcademicRecord <|-- Transcript            : Inheritance (Generalization)
+AcademicRecord <|-- Grade                 : Inheritance (Generalization)
+AcademicRecord <|-- Enrollment            : Inheritance (Generalization)
+
+ScheduleBase <|-- Schedule                : Inheritance (Generalization)
+
+CourseOffering <|-- Course                : Inheritance (Generalization)
+CourseOffering <|-- Section               : Inheritance (Generalization)
+
+' ─────────────────────────────────────────
+' AGGREGATION (open diamond o--)
+' ─────────────────────────────────────────
+
+Schedule       "1"  o-- "*"  Section      : Aggregation (contains)
+Course         "1"  o-- "*"  Section      : Aggregation (has)
+Transcript     "1"  o-- "*"  Grade        : Aggregation (contains)
+
+' ─────────────────────────────────────────
+' COMPOSITION (filled diamond *--)
+' ─────────────────────────────────────────
+
+Section        "1"  *-- "*"  Announcement : Composition (posts)
+
+' ─────────────────────────────────────────
+' ASSOCIATION (-->)
+' ─────────────────────────────────────────
+
+Student        "1"  --> "1"  Schedule     : Association (belongs-to)
+Student        "1"  --> "*"  Enrollment   : Association (enrolls)
+Enrollment     "*"  --> "1"  Section      : Association (registers-in)
+Student        "1"  --> "*"  Grade        : Association (receives)
+Grade          "*"  --> "1"  Section      : Association (for)
+Instructor     "*"  --> "1"  Section      : Association (taught-by)
+Registrar      "1"  --> "*"  Section      : Association (manages)
+Registrar      "1"  --> "*"  Course       : Association (verified-by)
+Course         "*"  --> "*"  Course       : Association (requires)
+Student        "1"  --> "*"  Transcript   : Association (belongs)
+TranscriptSystem "1" --> "*" Transcript   : Association (generates)
+
+' ─────────────────────────────────────────
+' DEPENDENCY (..>)
+' ─────────────────────────────────────────
+
+Student        "1"  ..> "1"  AuthenticationSystem : Dependency (used-by)
+Student        "*"  ..> "1"  FinanceSystem         : Dependency (checks)
+
+@enduml
