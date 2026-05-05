@@ -1,0 +1,41 @@
+@startuml
+title DFD Level 0 - University Course Registration System
+left to right direction
+
+skinparam rectangle {
+    BackgroundColor #F5F5F5
+    BorderColor #333333
+    FontSize 12
+}
+skinparam database {
+    BackgroundColor #DDEEFF
+    BorderColor #336699
+    FontSize 11
+}
+
+rectangle "Student" as Student #DDDDDD
+rectangle "Instructor" as Instructor #DDDDDD
+rectangle "Registrar Office" as Registrar #DDDDDD
+rectangle "Authentication System" as Auth #BBBBBB
+rectangle "Finance System" as Finance #BBBBBB
+rectangle "Transcript System" as Transcript #BBBBBB
+
+rectangle "University Course\nRegistration System\n(0.0)" as SYS #FFFACD
+
+Student --> SYS : Course Reg Request / Drop-Swap Request
+Instructor --> SYS : Grade Submission / Course Updates
+Registrar --> SYS : Enrollment Rules / Capacity Config
+
+SYS --> Student : Confirmation / Schedule / Grades
+SYS --> Instructor : Course Roster / Enrollment Stats
+SYS --> Registrar : Enrollment Reports / Capacity Status
+
+SYS --> Auth : User Credentials
+Auth --> SYS : Authentication Result
+
+SYS --> Finance : Payment Verification Request
+Finance --> SYS : Payment Status
+
+SYS --> Transcript : Academic Records Export
+
+@enduml
