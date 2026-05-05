@@ -1,0 +1,44 @@
+@startuml
+title DFD Level 2 - Process 1.0: Authenticate Users
+left to right direction
+
+skinparam rectangle {
+    BorderColor #333333
+    FontSize 12
+}
+skinparam database {
+    BackgroundColor #DDEEFF
+    BorderColor #336699
+    FontSize 11
+}
+
+rectangle "Student" as Student #DDDDDD
+rectangle "Instructor" as Instructor #DDDDDD
+rectangle "Registrar Office" as Registrar #DDDDDD
+rectangle "Authentication System" as Auth #BBBBBB
+
+rectangle "1.1\nCapture Credentials" as P11 #FFFACD
+rectangle "1.2\nValidate Against\nUser DB" as P12 #FFFACD
+rectangle "1.3\nVerify via External\nAuth System" as P13 #FFFACD
+rectangle "1.4\nGenerate\nSession Token" as P14 #FFFACD
+rectangle "1.5\nReturn Access\nResult" as P15 #FFFACD
+
+database "D1: User DB" as D_User
+
+Student --> P11 : Username / Password
+Instructor --> P11 : Username / Password
+Registrar --> P11 : Username / Password
+P11 --> P12 : Raw Credentials
+P12 --> D_User : Read User Record
+D_User --> P12 : User Record
+P12 --> P13 : Credentials and User Record
+P13 --> Auth : Credential Verification Request
+Auth --> P13 : Auth Result
+P13 --> P14 : Verified Identity
+P14 --> D_User : Store Session Token
+P14 --> P15 : Session Token and User Role
+P15 --> Student : Access Granted / Denied
+P15 --> Instructor : Access Granted / Denied
+P15 --> Registrar : Access Granted / Denied
+
+@enduml
