@@ -1,0 +1,53 @@
+@startuml
+title DFD Level 2 - Process 3.0: Manage Courses and Grades
+left to right direction
+
+skinparam rectangle {
+    BorderColor #333333
+    FontSize 12
+}
+skinparam database {
+    BackgroundColor #DDEEFF
+    BorderColor #336699
+    FontSize 11
+}
+
+rectangle "Instructor" as Instructor #DDDDDD
+rectangle "Registrar Office" as Registrar #DDDDDD
+
+rectangle "3.1\nCreate / Update\nCourse" as P31 #FFFACD
+rectangle "3.2\nManage Course\nRoster" as P32 #FFFACD
+rectangle "3.3\nUpload Course\nMaterials" as P33 #FFFACD
+rectangle "3.4\nSubmit Grades" as P34 #FFFACD
+rectangle "3.5\nValidate and\nStore Grades" as P35 #FFFACD
+rectangle "3.6\nPost Announcement" as P36 #FFFACD
+
+database "D2: Course DB" as D_Course
+database "D3: Enrollment DB" as D_Enroll
+database "D4: Grades DB" as D_Grades
+
+Instructor --> P31 : New Course Details / Updates
+Registrar --> P31 : Capacity Limits and Scheduling Approval
+P31 --> D_Course : Save / Update Course Record
+D_Course --> P31 : Existing Course Data
+
+Instructor --> P32 : Roster Review Request
+P32 --> D_Enroll : Read Enrolled Students
+D_Enroll --> P32 : Enrolled Student List
+P32 --> Instructor : Current Course Roster
+
+Instructor --> P33 : Course Materials
+P33 --> D_Course : Store Materials Reference
+
+Instructor --> P34 : Student Grades
+P34 --> D_Enroll : Read Student List for Validation
+D_Enroll --> P34 : Enrolled Students
+P34 --> P35 : Grade Submission Data
+
+P35 --> D_Grades : Store Validated Grades
+P35 --> Instructor : Grade Submission Confirmation
+
+Instructor --> P36 : Announcement Content
+P36 --> D_Course : Store Announcement
+
+@enduml
