@@ -11,7 +11,7 @@ skinparam database {
     BorderColor #336699
     FontSize 11
 }
-
+0
 rectangle "Instructor" as Instructor #DDDDDD
 rectangle "Registrar Office" as Registrar #DDDDDD
 
