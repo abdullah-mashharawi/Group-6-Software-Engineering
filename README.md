@@ -1,6 +1,8 @@
 # Group-6
 Case Study: University Course Registration System
+
 Course: Software Engineering
+
 Instructor: Samer Elkababji
 
 Prepared by:
